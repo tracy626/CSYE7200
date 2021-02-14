@@ -74,7 +74,7 @@ case class Different(less: Boolean) extends Comparison {
 
   def flip: Comparison = Different(!less)
 
-  override def toInt: Int = if (less) -1 else 1
+  def toInt: Int = if (less) -1 else 1
 }
 
 case object Same extends Comparison {
@@ -86,7 +86,7 @@ case object Same extends Comparison {
 
   def flip: Comparison = this
 
-  override def toInt: Int = 0
+  def toInt: Int = 0
 }
 
 object Comparison {

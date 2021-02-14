@@ -33,7 +33,7 @@ object Complex {
    * @param x the real part.
    * @return a new Complex.
    */
-  def apply(x: Double): Complex = ???
+  def apply(x: Double): Complex = Complex(x, 0)
 
   /**
    * Construct a Complex from polar coordinates (z).
@@ -47,11 +47,11 @@ object Complex {
 
     def div(x: Complex, y: Complex): Complex = times(x, y.inverse)
 
-    def plus(x: Complex, y: Complex): Complex = ???
+    def plus(x: Complex, y: Complex): Complex = Complex(x.real + y.real, x.imag + y.imag)
 
     def minus(x: Complex, y: Complex): Complex = plus(x, negate(y))
 
-    def times(x: Complex, y: Complex): Complex = ???
+    def times(x: Complex, y: Complex): Complex = Complex(x.real * y.real - x.imag * y.imag, x.imag * y.real + x.real * y.imag)
 
     def negate(x: Complex): Complex = times(x, minusOne)
 
