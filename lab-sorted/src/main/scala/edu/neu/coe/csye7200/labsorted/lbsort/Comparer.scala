@@ -43,6 +43,7 @@ object Comparer {
 
   implicit val intComparer: Comparer[Int] = Ordering[Int]
   // what should follow this comment?
+  implicit val charComparer: Comparer[Char] = Ordering[Char]
   implicit val stringComparer: Comparer[String] = Ordering[String] // TO BE IMPLEMENTED
 
   implicit def convert[T](x: Ordering[T]): Comparer[T] = (tt: (T, T)) => Comparison(x.compare(tt._1, tt._2))

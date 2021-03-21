@@ -131,11 +131,12 @@ object Movie extends App {
     // TO BE IMPLEMENTED
 
     import MoviesProtocol._
-    val msJson = ms.toJson
-
-    def fromJson(json:JsValue): Seq[Movie] = json.toString.parseJson.convertTo[Seq[Movie]]
-
-    ms.equals(fromJson(msJson))
+//    val msJson = ms.toJson
+//
+//    def fromJson(json:JsValue): Seq[Movie] = json.toString.parseJson.convertTo[Seq[Movie]]
+//
+//    ms.equals(fromJson(msJson))
+    ms.toJson.convertTo[Seq[Movie]] == ms
   }
 
   def getMoviesFromCountry(country: String, movies: Iterator[Try[Movie]]): Try[Seq[Movie]] = {

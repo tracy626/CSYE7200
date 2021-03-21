@@ -1,6 +1,9 @@
 package edu.neu.coe.csye7200.asstwc
 
 import java.net.URL
+
+import edu.neu.coe.csye7200.asstwc.WebCrawler.wget
+
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -24,7 +27,7 @@ object WebCrawler extends App {
   def wget(u: URL): Future[Seq[URL]] = {
     // Hint: write as a for-comprehension, using the method createURL(Option[URL], String) to get the appropriate URL for relative links
     // 16 points.
-    def getURLs(ns: Node): Seq[Try[URL]] = ??? // TO BE IMPLEMENTED
+    def getURLs(ns: Node): Seq[Try[URL]] = for (n <- ns \\ "a") yield createURL(Option(u), n.toString) // TO BE IMPLEMENTED
 
     def getLinks(g: String): Try[Seq[URL]] = {
       val ny = HTMLParser.parse(g) recoverWith { case f => Failure(new RuntimeException(s"parse problem with URL $u: $f")) }
@@ -32,15 +35,22 @@ object WebCrawler extends App {
     }
     // Hint: write as a for-comprehension, using getURLContent (above) and getLinks above. You might also need MonadOps.asFuture
     // 9 points.
-    ??? // TO BE IMPLEMENTED
+    for {
+      w <- getURLContent(u)
+      us <- MonadOps.asFuture(getLinks(w))
+    } yield us // TO BE IMPLEMENTED
   }
 
   def wget(us: Seq[URL]): Future[Seq[Either[Throwable, Seq[URL]]]] = {
-    val us2 = us.distinct take 10
+    val us2: Seq[URL] = us.distinct take 10
     // Hint: Use wget(URL) (above). MonadOps.sequence and Future.sequence are also available to you to use.
     // 15 points. Implement the rest of this, based on us2 instead of us.
     // TO BE IMPLEMENTED
-    ???
+    val usefs: Seq[Future[Either[Throwable, Seq[URL]]]] = for {
+      u <- us2
+      usf = wget(u)
+    } yield MonadOps.sequence(usf)
+    Future.sequence(usefs)
   }
 
   def crawler(depth: Int, us: Seq[URL]): Future[Seq[URL]] = {
